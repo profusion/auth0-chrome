@@ -131,22 +131,23 @@ Auth0's hosted Lock widget will be displayed in a new window.
 
 
 ### `Auth0CLient(domain, clientId)`
-The Library exposes Auth0Client which extends a generic PKCEClient. 
+
+The library exposes `Auth0Client` which extends a generic `PKCEClient`. 
 
 - `domain` : Your Auth0 Domain, to create one please visit https://auth0.com/
 - `clientId`: The clientId for the chrome client, to create one 
-   - Please visit https://manage.auth0.com/#/clients and click on  `+ Create Client`.
-   - Select Native as Client Type.
-   - In the Allowed Callback URLs Section please add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
-   - In the Allowed Origins section please add `chrome-extension://<yourchromeappid>`
+   - Visit https://manage.auth0.com/#/clients and click on  `+ Create Client`
+   - Select "Native" as the client type
+   - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
+   - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
    
 ### `Promise <Object> Auth0Client#authenticate(options, interactive)`
 
-This will call the Authentication API, and will render the login ui should userinteraction is required. Upon completion this method will resolve an object which will contain the requested token and meta information related to the authentication process.
+The `authenticate` method makes a call to the Authentication API and renders the log in UI if `userinteraction` is required. Upon completion, this method will resolve an object which will contain the requested token and meta information related to the authentication process.
 
-- `options` : options is an object which accepts all the parameters valid for [Auth0's Authentication API](https://auth0.com/docs/api/authentication/) except for `redirect_uri`, `response_type`, `code_challenge` & `code_challenge_method` as these are controlld by the library
+- `options`: `object` - accepts all the parameters valid for [Auth0's Authentication API](https://auth0.com/docs/api/authentication/) except for `redirect_uri`, `response_type`, `code_challenge` & `code_challenge_method` as these are controlled by the library
 
-- interactive: Interactive is a boolean, if set to false for advanced use-cases will result into chrome throwing an error if user-interaction is required during login. 
+- `interactive`: `boolean` - if set to `false` for advanced use-cases, Chrome will throw an error if user-interaction is required during login
 
 
 The `access_token` returned at the end of the authentication flow can then be used to make authenticated calls to your API. For more information on using access tokens, see the [full documentation](https://auth0.com/docs/api-auth).
