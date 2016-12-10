@@ -14,6 +14,8 @@ With this package, you can set up your Chrome extension to use Auth0's hosted [L
 
 If you haven't already done so, [sign up](https://auth0.com/signup) for your free Auth0 account and create an application in the dashboard. Find the **domain** and **client ID** from your app settings, as these will be required to integrate Auth0 in your Chrome extension.
 
+Chrome extensions are packaged as `.crx` files for distribution but may be loaded "unpacked" for development. For more information on how to load an unpacked extension, see the [Chrome extension docs](https://developer.chrome.com/extensions/getstarted#unpacked).
+
 When loading your application as an unpacked extension, a unique ID will be generated for it. You must whitelist your callback URL (the URL that Auth0 will return to once authentication is complete) and the allowed origin URL.
 
 In the **Allowed Callback URLs** section, whitelist your callback URL.
@@ -127,11 +129,30 @@ Auth0's hosted Lock widget will be displayed in a new window.
 
 ![auth0 lock](https://cdn.auth0.com/blog/auth0-chrome-lock.png)
 
-## Using the Authentication Result
+## Using the Library
 
-When a user successfully authenticates, an `access_token` is returned and saved in local storage. This token can be used to retrieve the user's profile at the `/userinfo` endpoint, and can also be used to makes fine-grained access control requests to an API.
 
-For more information on using access tokens, see the [full documentation](https://auth0.com/docs/api-auth).
+### `Auth0CLient(domain, clientId)`
+
+The library exposes `Auth0Client` which extends a generic `PKCEClient`. 
+
+- `domain` : Your Auth0 Domain, to create one please visit https://auth0.com/
+- `clientId`: The clientId for the chrome client, to create one 
+   - Visit https://manage.auth0.com/#/clients and click on  `+ Create Client`
+   - Select "Native" as the client type
+   - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
+   - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
+   
+### `Promise <Object> Auth0Client#authenticate(options, interactive)`
+
+The `authenticate` method makes a call to the Authentication API and renders the log in UI if `userinteraction` is required. Upon completion, this method will resolve an object which will contain the requested token and meta information related to the authentication process.
+
+- `options`: `object` - accepts all the parameters valid for [Auth0's Authentication API](https://auth0.com/docs/api/authentication/) except for `redirect_uri`, `response_type`, `code_challenge` & `code_challenge_method` as these are controlled by the library
+
+- `interactive`: `boolean` - if set to `false` for advanced use-cases, Chrome will throw an error if user-interaction is required during login
+
+
+The `access_token` returned at the end of the authentication flow can then be used to make authenticated calls to your API. For more information on using access tokens, see the [full documentation](https://auth0.com/docs/api-auth).
 
 ## Contributing
 
