@@ -1,6 +1,6 @@
 {
   "name": "auth0-chrome",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Package for using Auth0 in a Chrome Extension",
   "main": "dist/auth0chrome.js",
   "scripts": {
@@ -24,6 +24,6 @@
   "dependencies": {
     "babel-preset-es2015-sans-regenerator": "^6.9.0",
     "core-decorators": "^0.14.0",
-    "qs": "^6.3.0"
+    "url-parse": "^1.1.7"
   }
 }

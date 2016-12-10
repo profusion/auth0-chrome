@@ -1,7 +1,9 @@
 import autobind from 'core-decorators/lib/autobind';
 import generateRandomChallengePair from './generateRandomChallengePair';
-import qs from 'qs';
+import parse from 'url-parse';
 
+const qs = parse.qs;
+console.log(qs);
 /*
   Generic JavaScript PKCE Client, you can subclass this for React-Native,
   Cordova, Chrome, Some Other Environment which has its own handling for
@@ -48,7 +50,7 @@ class PKCEClient{
   }
 
   extractCode (resultUrl) {
-    const response = qs.parse(resultUrl.split('?')[1]);
+    const response = parse(resultUrl, true).query;
 
     if (response.error) {
       throw new Error(response.error_description || response.error);
