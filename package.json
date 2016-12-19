@@ -1,6 +1,6 @@
 {
   "name": "auth0-chrome",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Package for using Auth0 in a Chrome Extension",
   "main": "dist/auth0chrome.js",
   "scripts": {
