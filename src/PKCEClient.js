@@ -46,7 +46,7 @@ class PKCEClient{
     if(result.ok)
      return result.json();
 
-    throw Error(response.statusText);
+    throw Error(result.statusText);
   }
 
   extractCode (resultUrl) {
