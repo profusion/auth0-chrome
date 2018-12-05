@@ -129,6 +129,12 @@ Auth0's hosted Lock widget will be displayed in a new window.
 
 ![auth0 lock](https://cdn.auth0.com/blog/auth0-chrome-lock.png)
 
+### Styling
+
+To apply styles to the login page, go to your Auth0 account and go to [Hosted Pages](https://manage.auth0.com/#/login_page). From there toggle "Customize Login Page", that will allow you to not only customize the Lock widget, but also apply some styling to the page. 
+
+To read more on this go to [Customize Your Hosted Page](https://auth0.com/docs/hosted-pages#customize-your-hosted-page).
+
 ## Using the Library
 
 
