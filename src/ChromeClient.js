@@ -1,7 +1,5 @@
 import PKCEClient from './PKCEClient';
-import autobind from 'core-decorators/lib/autobind';
 
-@autobind
 class ChromeClient extends PKCEClient {
   getAuthResult (url, interactive) {
     return new Promise((resolve, reject) => {

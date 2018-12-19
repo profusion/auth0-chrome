@@ -1,4 +1,4 @@
-import autobind from 'core-decorators/lib/autobind';
+import '@babel/polyfill';
 import generateRandomChallengePair from './generateRandomChallengePair';
 import parse from 'url-parse';
 
@@ -10,7 +10,6 @@ console.log(qs);
   OAuth flows (like Windows?)
 */
 
-@autobind
 class PKCEClient{
   // These params will never change
   constructor (domain, clientId) {
@@ -26,6 +25,7 @@ class PKCEClient{
     throw new Error('Must be implemented by a sub-class');
   }
 
+  // @bound
   async exchangeCodeForToken (code, verifier) {
     const {domain, clientId} = this;
     const body = JSON.stringify({
@@ -59,6 +59,7 @@ class PKCEClient{
     return response.code;
   }
 
+  //@bound
   async authenticate (options = {}, interactive = true) {
     const {domain, clientId} = this;
     const {secret, hashed} = generateRandomChallengePair();

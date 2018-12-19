@@ -1,4 +1,7 @@
 {
-  "presets": ["es2015-sans-regenerator", "stage-0"],
-  "plugins": ["transform-decorators-legacy"]
+  "presets": [ "@babel/preset-env" ],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": false }]
+  ]
 }
