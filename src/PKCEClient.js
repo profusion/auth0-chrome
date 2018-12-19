@@ -1,6 +1,7 @@
-import '@babel/polyfill';
+import '@babel/runtime/regenerator'
 import generateRandomChallengePair from './generateRandomChallengePair';
 import parse from 'url-parse';
+import { boundMethod } from 'autobind-decorator'
 
 const qs = parse.qs;
 console.log(qs);
@@ -10,6 +11,7 @@ console.log(qs);
   OAuth flows (like Windows?)
 */
 
+// @annotation
 class PKCEClient{
   // These params will never change
   constructor (domain, clientId) {
@@ -25,7 +27,7 @@ class PKCEClient{
     throw new Error('Must be implemented by a sub-class');
   }
 
-  // @bound
+  @boundMethod
   async exchangeCodeForToken (code, verifier) {
     const {domain, clientId} = this;
     const body = JSON.stringify({
@@ -59,7 +61,7 @@ class PKCEClient{
     return response.code;
   }
 
-  //@bound
+  @boundMethod
   async authenticate (options = {}, interactive = true) {
     const {domain, clientId} = this;
     const {secret, hashed} = generateRandomChallengePair();

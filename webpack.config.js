@@ -1,41 +1,50 @@
+const merge = require('webpack-merge');
 const path = require('path');
-const webpack = require('webpack');
 
-const config = {
-
+const common = {
   context: __dirname,
-
-  entry: {
-    'auth0chrome.min': './index.js',
-    'auth0chrome': './index.js'
-  },
 
   output: {
     path: path.resolve(__dirname, './dist'),
     library: 'Auth0Chrome',
     libraryTarget: 'umd',
+    libraryExport: 'default',
     filename: '[name].js'
   },
 
-  devtool: 'source-map',
-
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      minimize: true,
-      compress: true,
-    })
-  ],
-
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        loader: 'babel-loader'
+        use: {
+          loader: 'babel-loader'
+        }
       }
     ]
   }
 }
 
-module.exports = config;
+const prod = {
+
+  entry: {
+    'auth0chrome.min': './index.js'
+  },
+
+  mode: 'production',
+
+  devtool: 'source-map'
+}
+
+const dev = {
+
+  entry: {
+    'auth0chrome': './index.js'
+  },
+
+  mode: 'development',
+
+  devtool: 'source-map'
+}
+
+module.exports = [ merge(common, prod), merge(common, dev) ];
