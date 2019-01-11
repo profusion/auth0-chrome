@@ -25045,7 +25045,6 @@ console.log(qs);
   Cordova, Chrome, Some Other Environment which has its own handling for
   OAuth flows (like Windows?)
 */
-// @annotation
 
 var PKCEClient = (_class =
 /*#__PURE__*/

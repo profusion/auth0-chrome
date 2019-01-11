@@ -11,7 +11,6 @@ console.log(qs);
   OAuth flows (like Windows?)
 */
 
-// @annotation
 class PKCEClient{
   // These params will never change
   constructor (domain, clientId) {
