@@ -1,16 +1,13 @@
-# Auth0 for Chrome Extensions
+# Auth0 for Chrome extensions
+<img src="https://img.shields.io/badge/community-driven-brightgreen.svg"/> <br>
 
-This package allows you to use Auth0 within a Chrome extension.
+This package allows you to use Auth0 within a Chrome extension. It provides a generic  `PKCEClient.js`  file which allows you to use the  [Proof Key for Code Exchange](https://tools.ietf.org/html/rfc7636)  spec, which is recommended for native applications.
 
-## Overview
+With this package, you can set up your Chrome extension to use Auth0's hosted  [Lock](https://auth0.com/lock)  widget. It uses the  `launchWebAuthFlow`  from Chrome's identity API to retrieve tokens from Auth0.
 
-This package provides a generic `PKCEClient.js` file which allows you to use the [Proof Key for Code Exchange](https://tools.ietf.org/html/rfc7636) spec, which is recommended for native applications.
+This repo is supported and maintained by Community Developers, not Auth0. For more information about different support levels check https://auth0.com/docs/support/matrix .
 
-With this package, you can set up your Chrome extension to use Auth0's hosted [Lock](https://auth0.com/lock) widget. It uses the `launchWebAuthFlow` from Chrome's identity API to retrieve tokens from Auth0.
-
-## Integration
-
-### Getting Started
+## Getting started
 
 If you haven't already done so, [sign up](https://auth0.com/signup) for your free Auth0 account and create an application in the dashboard. Find the **domain** and **client ID** from your app settings, as these will be required to integrate Auth0 in your Chrome extension. Note that the client type that you use has to be `Native`, or you will get unauthorized errors.
 
@@ -31,6 +28,7 @@ chrome-extension://<YOUR_APP_ID>
 ```
 
 ### Installation
+
 
 Install the `auth0-chrome` package with npm.
 
@@ -68,6 +66,8 @@ window.env = {
   AUTH0_CLIENT_ID: 'YOUR_AUTH0_CLIENT_ID',
 };
 ```
+
+## Usage
 
 ### Login
 
@@ -131,40 +131,41 @@ Auth0's hosted Lock widget will be displayed in a new window.
 
 ### Styling
 
-To apply styles to the login page, go to your Auth0 account and go to [Hosted Pages](https://manage.auth0.com/#/login_page). From there toggle "Customize Login Page", that will allow you to not only customize the Lock widget, but also apply some styling to the page. 
+To apply styles to the login page, go to your Auth0 account and go to [Hosted Pages](https://manage.auth0.com/#/login_page). From there toggle "Customize Login Page", that will allow you to not only customize the Lock widget, but also apply some styling to the page.
 
 To read more on this go to [Customize Your Hosted Page](https://auth0.com/docs/hosted-pages#customize-your-hosted-page).
 
-## Using the Library
+### Using the Library
 
+**Auth0CLient(domain, clientId)**
 
-### `Auth0CLient(domain, clientId)`
-
-The library exposes `Auth0Client` which extends a generic `PKCEClient`. 
+The library exposes `Auth0Client` which extends a generic `PKCEClient`.
 
 - `domain` : Your Auth0 Domain, to create one please visit https://auth0.com/
-- `clientId`: The clientId for the chrome client, to create one 
+- `clientId`: The clientId for the chrome client, to create one
    - Visit https://manage.auth0.com/#/clients and click on  `+ Create Client`
    - Select "Native" as the client type
    - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
    - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
-   
-### `Promise <Object> Auth0Client#authenticate(options, interactive)`
 
-The `authenticate` method makes a call to the Authentication API and renders the log in UI if `userinteraction` is required. Upon completion, this method will resolve an object which will contain the requested token and meta information related to the authentication process.
+**Promise <Object> Auth0Client#authenticate(options, interactive)**
+
+The `authenticate` method makes a call to the Authentication API and renders the login UI if `userinteraction` is required. Upon completion, this method will resolve an object which will contain the requested token and meta information related to the authentication process.
 
 - `options`: `object` - accepts all the parameters valid for [Auth0's Authentication API](https://auth0.com/docs/api/authentication/) except for `redirect_uri`, `response_type`, `code_challenge` & `code_challenge_method` as these are controlled by the library
 
 - `interactive`: `boolean` - if set to `false` for advanced use-cases, Chrome will throw an error if user-interaction is required during login
 
-
 The `access_token` returned at the end of the authentication flow can then be used to make authenticated calls to your API. For more information on using access tokens, see the [full documentation](https://auth0.com/docs/api-auth).
 
-## Contributing
 
-Pull requests are welcome!
+## Contribute
 
-## Development
+Feel like contributing to this repo? We're glad to hear that! Before you start contributing please visit our [Contributing Guideline](https://github.com/auth0-community/getting-started/blob/master/CONTRIBUTION.md).
+
+Here you can also find the [PR template](https://github.com/auth0-community/auth0-chrome/blob/master/PULL_REQUEST_TEMPLATE.md) to fill once creating a PR. It will automatically appear once you open a pull request.
+
+### Development
 
 Install the dev dependencies.
 
@@ -174,30 +175,53 @@ npm install
 
 When changes are made, run `npm run build` to produce new files for the `dist` folder.
 
+## Issues Reporting
+
+Spotted a bug or any other kind of issue? We're just humans and we're always waiting for constructive feedback! Check our section on how to [report issues](https://github.com/auth0-community/getting-started/blob/master/CONTRIBUTION.md#issues)!
+
+Here you can also find the [Issue template](https://github.com/auth0-community/auth0-chrome/blob/master/ISSUE_TEMPLATE.md) to fill once opening a new issue. It will automatically appear once you create an issue.
+
+## Repo Community
+
+Feel like PRs and issues are not enough? Want to dive into further discussion about the tool? We created topics for each Auth0 Community repo so that you can join discussion on stack available on our repos. Here it is for this one: [auth0-chrome](https://community.auth0.com/t/auth0-community-oss-auth0-chrome/15985)
+
+<a href="https://community.auth0.com/">
+<img src="/assets/join_auth0_community_badge.png"/>
+</a>
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](https://github.com/auth0-community/auth0-chrome/blob/master/LICENSE) file for more info.
+
 ## What is Auth0?
 
 Auth0 helps you to:
 
-* Add authentication with [multiple authentication sources](https://docs.auth0.com/identityproviders), either social like **Google, Facebook, Microsoft Account, LinkedIn, GitHub, Twitter, Box, Salesforce, amont others**, or enterprise identity systems like **Windows Azure AD, Google Apps, Active Directory, ADFS or any SAML Identity Provider**.
-* Add authentication through more traditional **[username/password databases](https://docs.auth0.com/mysql-connection-tutorial)**.
-* Add support for **[linking different user accounts](https://docs.auth0.com/link-accounts)** with the same user.
-* Support for generating signed [Json Web Tokens](https://docs.auth0.com/jwt) to call your APIs and **flow the user identity** securely.
-* Analytics of how, when and where users are logging in.
-* Pull data from other sources and add it to the user profile, through [JavaScript rules](https://docs.auth0.com/rules).
+* Add authentication with [multiple authentication sources](https://docs.auth0.com/identityproviders), either social like
+  * Google
+  * Facebook
+  * Microsoft
+  * Linkedin
+  * GitHub
+  * Twitter
+  * Box
+  * Salesforce
+  * etc.
+
+  **or** enterprise identity systems like:
+  * Windows Azure AD
+  * Google Apps
+  * Active Directory
+  * ADFS
+  * Any SAML Identity Provider
+
+* Add authentication through more traditional [username/password databases](https://docs.auth0.com/mysql-connection-tutorial)
+* Add support for [linking different user accounts](https://docs.auth0.com/link-accounts) with the same user
+* Support for generating signed [JSON Web Tokens](https://docs.auth0.com/jwt) to call your APIs and create user identity flow securely
+* Analytics of how, when and where users are logging in
+* Pull data from other sources and add it to user profile, through [JavaScript rules](https://docs.auth0.com/rules)
 
 ## Create a free Auth0 account
 
-1. Go to [Auth0](https://auth0.com/signup) and click Sign Up.
-2. Use Google, GitHub or Microsoft Account to login.
-
-## Issue Reporting
-
-If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
-
-## Author
-
-[Auth0](https://auth0.com)
-
-## License
-
-This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
+* Go to [Auth0 website](https://auth0.com/signup)
+* Hit the **SIGN UP** button in the upper-right corner
