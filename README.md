@@ -137,7 +137,7 @@ To read more on this go to [Customize Your Hosted Page](https://auth0.com/docs/h
 
 ### Using the Library
 
-**Auth0CLient(domain, clientId)**
+#### Auth0CLient(domain, clientId)
 
 The library exposes `Auth0Client` which extends a generic `PKCEClient`.
 
@@ -148,7 +148,7 @@ The library exposes `Auth0Client` which extends a generic `PKCEClient`.
    - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
    - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
 
-**Promise <Object> Auth0Client#authenticate(options, interactive)**
+#### Promise <Object> Auth0Client#authenticate(options, interactive)
 
 The `authenticate` method makes a call to the Authentication API and renders the login UI if `userinteraction` is required. Upon completion, this method will resolve an object which will contain the requested token and meta information related to the authentication process.
 
