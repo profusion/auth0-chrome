@@ -145,7 +145,7 @@ To read more on this go to [Customize Your Hosted Page](https://auth0.com/docs/h
     - `clientId`: The clientId for the chrome client, to create one
     - Visit https://manage.auth0.com/#/clients and click on  `+ Create Client`
     - Select "Native" as the client type
-    - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
+    - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapp.org/auth0` as an allowed callback url
     - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
 
 * Promise <Object> Auth0Client#authenticate(options, interactive)
