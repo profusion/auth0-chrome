@@ -137,13 +137,13 @@ To read more on this go to [Customize Your Hosted Page](https://auth0.com/docs/h
 
 ### Using the Library
 
-* Auth0CLient(domain, clientId)
+* Auth0Chrome(domain, clientId)
 
-    The library exposes `Auth0Client` which extends a generic `PKCEClient`.
+    The library exposes `Auth0Chrome` which extends a generic `PKCEClient`.
 
     - `domain` : Your Auth0 Domain, to create one please visit https://auth0.com/
     - `clientId`: The clientId for the chrome client, to create one
-    - Visit https://manage.auth0.com/#/clients and click on  `+ Create Client`
+    - Visit https://manage.auth0.com/#/clients and click on  `+ Create Application`
     - Select "Native" as the client type
     - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapp.org/auth0` as an allowed callback url
     - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
