@@ -1,5 +1,5 @@
 # Auth0 for Chrome extensions
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 <img src="https://img.shields.io/badge/community-driven-brightgreen.svg"/> <br>
 
 ### Contributors
@@ -11,6 +11,7 @@ Thanks goes to these wonderful people who contribute(d) or maintain(ed) this rep
 <table>
   <tr>
     <td align="center"><a href="https://twitter.com/beardaway"><img src="https://avatars3.githubusercontent.com/u/11062800?v=4" width="100px;" alt="Conrad Sopala"/><br /><sub><b>Conrad Sopala</b></sub></a><br /><a href="#maintenance-beardaway" title="Maintenance">🚧</a> <a href="#review-beardaway" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/darkyen"><img src="https://avatars1.githubusercontent.com/u/1041315?v=4" width="100px;" alt="Abhishek Hingnikar"/><br /><sub><b>Abhishek Hingnikar</b></sub></a><br /><a href="#review-darkyen" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/auth0-community/auth0-chrome/commits?author=darkyen" title="Code">💻</a></td>
   </tr>
 </table>
 
