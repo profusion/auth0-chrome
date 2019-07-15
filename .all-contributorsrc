@@ -14,6 +14,16 @@
         "maintenance",
         "review"
       ]
+    },
+    {
+      "login": "darkyen",
+      "name": "Abhishek Hingnikar",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1041315?v=4",
+      "profile": "https://github.com/darkyen",
+      "contributions": [
+        "review",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
