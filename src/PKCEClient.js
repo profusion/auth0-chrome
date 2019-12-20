@@ -26,21 +26,36 @@ class PKCEClient{
   }
 
   @boundMethod
-  async exchangeCodeForToken (code, verifier) {
+  async exchangeCodeForToken (code, verifier, awsCognito = false) {
     const {domain, clientId} = this;
-    const body = JSON.stringify({
+    const params = ({
       redirect_uri: this.getRedirectURL(),
       grant_type: 'authorization_code',
       code_verifier: verifier,
       client_id: clientId,
       code
     });
-    const result = await fetch(`https://${domain}/oauth/token`, {
+
+    let body;
+
+    if(awsCognito){
+      body =  Object.keys(params).map((key) => {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+      }).join('&');
+    }
+
+    else{
+      body = JSON.stringify(params);      
+    }
+
+    let authVersion = awsCognito ? "2" : "";
+
+    const result = await fetch(`https://${domain}/oauth${authVersion}/token`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': awsCognito ? 'application/x-www-form-urlencoded' : 'application/json'
       },
-      body
+      body: body
     });
 
     if(result.ok)
@@ -60,7 +75,7 @@ class PKCEClient{
   }
 
   @boundMethod
-  async authenticate (options = {}, interactive = true) {
+  async authenticate (options = {}, interactive = true, awsCognito = false) {
     const {domain, clientId} = this;
     const {secret, hashed} = generateRandomChallengePair();
 
@@ -72,10 +87,11 @@ class PKCEClient{
       response_type: 'code',
     });
 
-    const url = `https://${domain}/authorize?${qs.stringify(options)}`;
+    const authenticationType = awsCognito ? 'login' : 'authorize';
+    const url = `https://${domain}/${authenticationType}?${qs.stringify(options)}`;
     const resultUrl = await this.getAuthResult(url, interactive);
     const code = this.extractCode(resultUrl);
-    return this.exchangeCodeForToken(code, secret);
+    return this.exchangeCodeForToken(code, secret, awsCognito);
   }
 }
 
