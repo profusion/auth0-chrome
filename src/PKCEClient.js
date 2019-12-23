@@ -2,8 +2,10 @@ import '@babel/runtime/regenerator'
 import generateRandomChallengePair from './generateRandomChallengePair';
 import parse from 'url-parse';
 import { boundMethod } from 'autobind-decorator'
+import { Providers } from './IdentityProviders/providerConstants'
 
 const qs = parse.qs;
+
 /*
   Generic JavaScript PKCE Client, you can subclass this for React-Native,
   Cordova, Chrome, Some Other Environment which has its own handling for
@@ -12,9 +14,11 @@ const qs = parse.qs;
 
 class PKCEClient{
   // These params will never change
-  constructor (domain, clientId) {
+  constructor (domain, clientId,appSecret = null) {
     this.domain = domain;
     this.clientId = clientId;
+    this.appKey = clientId;
+    this.appSecret = appSecret
   }
 
   async getAuthResult (url, interactive) {
@@ -26,21 +30,28 @@ class PKCEClient{
   }
 
   @boundMethod
-  async exchangeCodeForToken (code, verifier) {
-    const {domain, clientId} = this;
-    const body = JSON.stringify({
+  async exchangeCodeForToken (code, verifier, provider) {
+    const {domain, clientId, appKey, appSecret} = this;
+    const params = ({
       redirect_uri: this.getRedirectURL(),
       grant_type: 'authorization_code',
       code_verifier: verifier,
       client_id: clientId,
       code
     });
-    const result = await fetch(`https://${domain}/oauth/token`, {
+    
+    
+    const body = provider.generatePayload(params);
+    const authVersion = provider.authVersion();
+    const headers  = {
+      'Content-Type': provider.contentType()
+    }
+    const processedHeaders = provider.processHeaders(headers, appKey, appSecret);
+    const exchangeCodeDomain = provider.exchangeCodeUrl(domain);
+    const result = await fetch(`https://${exchangeCodeDomain}/oauth${authVersion}/token`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body
+      headers: processedHeaders,
+      body: body
     });
 
     if(result.ok)
@@ -60,9 +71,15 @@ class PKCEClient{
   }
 
   @boundMethod
-  async authenticate (options = {}, interactive = true) {
-    const {domain, clientId} = this;
+  async authenticate (options = {}, interactive = true, providerName) {
+    const {domain, clientId, appKey, appSecret} = this;
     const {secret, hashed} = generateRandomChallengePair();
+    console.log("inside authenticate");
+    if(! (providerName in Providers)){
+      throw new Error(`there's no such provider: ${providerName}`);
+    }
+
+    const provider = new Providers[providerName];
 
     Object.assign(options, {
       client_id: clientId,
@@ -72,10 +89,12 @@ class PKCEClient{
       response_type: 'code',
     });
 
-    const url = `https://${domain}/authorize?${qs.stringify(options)}`;
+    const filteredOpt = provider.filterFields(options);
+    const authType = provider.authType()
+    const url = `https://${domain}/${authType}?${qs.stringify(filteredOpt)}`;
     const resultUrl = await this.getAuthResult(url, interactive);
     const code = this.extractCode(resultUrl);
-    return this.exchangeCodeForToken(code, secret);
+    return this.exchangeCodeForToken(code, secret, provider);
   }
 }
 
