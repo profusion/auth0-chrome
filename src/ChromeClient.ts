@@ -1,7 +1,7 @@
 import PKCEClient from './PKCEClient';
 
 class ChromeClient extends PKCEClient {
-  getAuthResult (url, interactive) {
+  getAuthResult (url: string , interactive: boolean): Promise<string> {
     return new Promise((resolve, reject) => {
       chrome.identity.launchWebAuthFlow({url, interactive}, (callbackURL) => {
         if ( chrome.runtime.lastError ) {
@@ -12,7 +12,7 @@ class ChromeClient extends PKCEClient {
     });
   }
 
-  getRedirectURL () {
+  getRedirectURL (): string {
     return chrome.identity.getRedirectURL('auth0');
   }
 }

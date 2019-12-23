@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import '@babel/runtime/regenerator'
 import generateRandomChallengePair from './generateRandomChallengePair';
 import parse from 'url-parse';
-import { boundMethod } from 'autobind-decorator'
+import { boundMethod } from 'autobind-decorator';
+import { Providers } from "./identityProvider/providers/providers";
+import IProvider from "./identityProvider/interface/identityProvider";
 
 const qs = parse.qs;
 /*
@@ -11,22 +14,25 @@ const qs = parse.qs;
 */
 
 class PKCEClient{
+  domain: string;
+  clientId: string;
   // These params will never change
-  constructor (domain, clientId) {
+  constructor (domain: string, clientId: string) {
     this.domain = domain;
     this.clientId = clientId;
   }
 
-  async getAuthResult (url, interactive) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getAuthResult (url: string, interactive: boolean): Promise <string> {
     throw new Error('Must be implemented by a sub-class');
   }
 
-  getRedirectURL () {
+  getRedirectURL (): string {
     throw new Error('Must be implemented by a sub-class');
   }
 
   @boundMethod
-  async exchangeCodeForToken (code, verifier, awsCognito = false) {
+  async exchangeCodeForToken (code: string, verifier: string, idProvider: IProvider): Promise<Response> {
     const {domain, clientId} = this;
     const params = ({
       redirect_uri: this.getRedirectURL(),
@@ -36,24 +42,13 @@ class PKCEClient{
       code
     });
 
-    let body;
-
-    if(awsCognito){
-      body =  Object.keys(params).map((key) => {
-        return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-      }).join('&');
-    }
-
-    else{
-      body = JSON.stringify(params);      
-    }
-
-    let authVersion = awsCognito ? "2" : "";
+    const body = idProvider.generatePayload(params);
+    const authVersion = idProvider.authVersion();
 
     const result = await fetch(`https://${domain}/oauth${authVersion}/token`, {
       method: 'POST',
       headers: {
-        'Content-Type': awsCognito ? 'application/x-www-form-urlencoded' : 'application/json'
+        'Content-Type':idProvider.contentType()
       },
       body: body
     });
@@ -64,7 +59,7 @@ class PKCEClient{
     throw Error(result.statusText);
   }
 
-  extractCode (resultUrl) {
+  extractCode (resultUrl: string): string | undefined {
     const response = parse(resultUrl, true).query;
 
     if (response.error) {
@@ -75,10 +70,14 @@ class PKCEClient{
   }
 
   @boundMethod
-  async authenticate (options = {}, interactive = true, awsCognito = false) {
+  async authenticate (options = {}, interactive = true, providerName: string): Promise<Response> {
     const {domain, clientId} = this;
     const {secret, hashed} = generateRandomChallengePair();
-
+    if(! (providerName in Providers)){
+      throw new Error(`there's no such provider: ${providerName}`);
+    }
+    
+    const idProvider = Providers[providerName];
     Object.assign(options, {
       client_id: clientId,
       code_challenge: hashed,
@@ -87,11 +86,14 @@ class PKCEClient{
       response_type: 'code',
     });
 
-    const authenticationType = awsCognito ? 'login' : 'authorize';
+    const authenticationType = idProvider.authType()
     const url = `https://${domain}/${authenticationType}?${qs.stringify(options)}`;
     const resultUrl = await this.getAuthResult(url, interactive);
-    const code = this.extractCode(resultUrl);
-    return this.exchangeCodeForToken(code, secret, awsCognito);
+    let code = this.extractCode(resultUrl);
+    if(code === undefined){
+      code = "";
+    }
+    return this.exchangeCodeForToken(code, secret, idProvider);
   }
 }
 
