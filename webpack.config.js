@@ -1,9 +1,10 @@
 const merge = require('webpack-merge');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var webpack = require("webpack");
 
 const common = {
   context: __dirname,
-
   output: {
     path: path.resolve(__dirname, './dist'),
     library: 'Auth0Chrome',
@@ -26,7 +27,13 @@ const common = {
 }
 
 const prod = {
-
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        test: /\.js(\?.*)?$/i,
+      }),
+    ],
+  },
   entry: {
     'auth0chrome.min': './index.js'
   },
